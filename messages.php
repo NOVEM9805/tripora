@@ -1,0 +1,10 @@
+<?php
+require dirname(__DIR__).'/includes/bootstrap.php';$page='admin';$section='messages';require ROOT.'/includes/page-start.php';
+?>
+<?php if(!support_ready()): ?><p class="notice error"><?=e(t('Run the database upgrade before using chat.'))?></p><?php else:
+$threads=support_threads();$selected=(int)($_GET['thread_id']??($threads[0]['id']??0));$thread=$selected?support_thread($selected,$user):null; ?>
+<p class="muted"><?=e(t('Private customer conversations. Replies appear without refreshing the page.'))?></p><div class="support-layout"><aside class="panel thread-list" data-admin-inbox data-endpoint="<?=e(asset('api/chat.php'))?>"><h3><?=e(t('Conversations'))?></h3>
+<?php foreach($threads as $item): ?><a class="thread-item <?=$selected===$item['id']?'selected':''?>" data-thread="<?=e($item['id'])?>" href="<?=e(url('admin',['section'=>'messages','thread_id'=>$item['id']]))?>"><strong><?=e($item['customer_name'])?></strong><small><?=e($item['email'])?></small><span class="badge" data-unread><?=e($item['unread'])?></span></a><?php endforeach ?><?php if(!$threads): ?><p class="threads-empty"><?=e(t('No conversations yet.'))?></p><?php endif ?></aside><div><?php if($thread): chat_shell($thread); ?><button class="button outline space-top" type="button" data-resolve-chat><?=e(t('Mark resolved'))?></button><?php else: ?><div class="empty"><h3><?=e(t('Select a conversation'))?></h3><p><?=e(t('Customer messages will appear here.'))?></p></div><?php endif ?></div></div>
+<?php endif ?>
+<details class="panel space-top"><summary><?=e(t('Earlier contact messages'))?></summary><p class="muted"><?=e(t('Messages from verified customer email addresses are also linked to their private conversation. Other guest messages remain here.'))?></p><?php foreach(all('SELECT * FROM contacts ORDER BY id DESC LIMIT 200') as $m): ?><article class="legacy-message"><strong><?=e($m['name'])?></strong><small><?=e($m['email'])?> · <?=e($m['created_at'])?></small><p><?=nl2br(e($m['message']))?></p></article><?php endforeach ?></details>
+<?php require ROOT.'/includes/page-end.php'; ?>

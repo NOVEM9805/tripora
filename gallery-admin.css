@@ -1,0 +1,24 @@
+/* Compact destination thumbnails. Keep this sheet after the base stylesheet. */
+.destination-gallery .destination-thumbnails{display:flex;justify-content:flex-start;gap:9px;max-width:100%;overflow-x:auto;overflow-y:hidden;padding:12px 2px 7px;scrollbar-width:thin}
+.destination-gallery .destination-thumbnail{display:block;flex:0 0 54px;width:54px;min-width:54px;max-width:54px;height:42px;min-height:42px;max-height:42px;padding:2px;border:1px solid transparent;border-radius:4px;overflow:hidden}
+.destination-gallery .destination-thumbnail:first-child{margin-left:auto}
+.destination-gallery .destination-thumbnail:last-child{margin-right:auto}
+.destination-gallery .destination-thumbnails .destination-thumbnail>img{display:block;width:100%;min-width:0;max-width:100%;height:100%;min-height:0;max-height:100%;object-fit:cover;border-radius:2px;opacity:1;filter:none;transition:opacity .15s}
+.destination-gallery .destination-thumbnail.active{border-color:var(--line);background:var(--sage)}
+.destination-gallery .destination-thumbnail.active>img{opacity:.36;filter:blur(.6px)}
+.destination-gallery .destination-gallery-stage[aria-busy="true"] .detail-photo{opacity:1}
+.admin-gallery-editor{border-top:1px solid var(--line);margin-top:8px;padding-top:20px;min-width:0}
+.admin-gallery-editor h3{font-size:23px;margin:0 0 10px}
+.admin-gallery-list{display:grid;gap:10px;margin-top:16px}
+.admin-gallery-photo{display:grid;grid-template-columns:64px minmax(0,1fr) auto;align-items:center;gap:13px;padding:10px;border:1px solid var(--line);border-radius:5px}
+.admin-gallery-photo>img{display:block;width:64px;height:48px;object-fit:cover;border-radius:3px}
+.gallery-replace input{font-size:11px;max-width:100%;min-width:0;padding:7px}
+.admin-catalogue-filters{display:grid;grid-template-columns:minmax(130px,1fr) minmax(160px,1.5fr) auto;align-items:end;gap:12px;margin:20px 0}
+[data-entity="hotels"] .admin-catalogue-filters{grid-template-columns:minmax(100px,1fr) minmax(110px,1fr) minmax(160px,1.5fr) auto}
+.admin-catalogue-filters label{display:grid;gap:7px;min-width:0;font-size:12px}
+.admin-catalogue-filters input,.admin-catalogue-filters select{width:100%;min-width:0}
+.catalogue-pagination{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:20px 0}
+.admin-gallery-editor [hidden],[data-admin-catalogue] [hidden]{display:none}
+button:disabled{cursor:default;opacity:.5}
+@media(max-width:900px){[data-entity="hotels"] .admin-catalogue-filters{grid-template-columns:1fr 1fr}[data-entity="hotels"] .catalogue-search{grid-column:1/3}}
+@media(max-width:600px){.destination-gallery .destination-thumbnail{flex-basis:48px;width:48px;min-width:48px;max-width:48px;height:38px;min-height:38px;max-height:38px}.destination-gallery .destination-thumbnails{gap:8px;padding-top:10px}.admin-catalogue-filters,[data-entity="hotels"] .admin-catalogue-filters{grid-template-columns:1fr}.admin-catalogue-filters .catalogue-search,[data-entity="hotels"] .catalogue-search{grid-column:auto}.admin-gallery-photo{grid-template-columns:54px minmax(0,1fr);gap:10px}.admin-gallery-photo>img{width:54px;height:42px}.admin-gallery-photo>button{grid-column:2;justify-self:start}}

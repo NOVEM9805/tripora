@@ -1,0 +1,9 @@
+<?php
+require dirname(__DIR__).'/includes/bootstrap.php';
+$page='admin';
+$section='bookings';
+require ROOT.'/includes/page-start.php';
+ ?>
+<p class="muted"><?=e(t('Newest 200 bookings. Cancelling a paid stay marks the payment for a manual refund.'))?></p><div class="table-wrap"><table><thead><tr><th><?=e(t('Reference / customer'))?></th><th><?=e(t('Stay / dates'))?></th><th><?=e(t('Total'))?></th><th><?=e(t('Status'))?></th><th><?=e(t('Actions'))?></th></tr></thead><tbody><?php foreach(all('SELECT b.*,u.email,h.name hotel_name,r.name room_name FROM bookings b JOIN users u ON u.id=b.user_id JOIN rooms r ON r.id=b.room_id JOIN hotels h ON h.id=r.hotel_id ORDER BY b.id DESC LIMIT 200') as $b): ?><tr><td><strong><?=e($b['reference'])?></strong><br><?=e($b['guest_name'])?><br><small><?=e($b['email'])?><br><?=e($b['phone'])?></small></td><td><?=e($b['hotel_name'])?><br><small><?=e(t($b['room_name']))?> · <?=e($b['guests'])?> <?=e(t('guests'))?><br><?=e($b['check_in'])?> → <?=e($b['check_out'])?></small></td><td><?=money($b['total'])?></td><td><span class="badge <?=e($b['status'])?>"><?=e(t(str_replace('_',' ',$b['status'])))?></span></td><td><?php if(in_array($b['status'],['pending_payment','awaiting_review','confirmed'])): ?><form class="stack" method="post" data-confirm="<?=e(t('Apply this booking action?'))?>"><?=csrf()?><input type="hidden" name="action" value="admin_booking"><input type="hidden" name="id" value="<?=e($b['id'])?>"><select name="decision"><option value="cancel"><?=e(t('Cancel booking'))?></option><?php if($b['status']==='confirmed'): ?><option value="complete"><?=e(t('Complete after check-out'))?></option><?php endif ?></select><button class="button small outline"><?=e(t('Apply'))?></button></form><?php endif ?></td></tr><?php endforeach ?></tbody></table></div>
+
+<?php require ROOT.'/includes/page-end.php'; ?>

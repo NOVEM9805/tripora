@@ -1,0 +1,11 @@
+<?php
+require dirname(__DIR__).'/includes/bootstrap.php';
+$page='country';
+require ROOT.'/includes/page-start.php';
+
+$isCountry=$page==='country';$table=$isCountry?'countries':'destinations';$item=one("SELECT * FROM $table WHERE id=? AND active=1",[(int)($_GET['id']??0)]);
+if(!$item):http_response_code(404); ?><section class="wrap section"><h1><?=e(t('Place not found.'))?></h1><a class="button" href="<?=e(url('explore'))?>"><?=e(t('Explore countries'))?></a></section><?php else: ?>
+<section class="wrap section"><a class="text-link" href="<?=e(url('explore'))?>"><?=e(t('← Explore'))?></a><div class="detail-hero"><div><p class="eyebrow"><?=e(t($isCountry?'COUNTRY GUIDE':'DESTINATION GUIDE'))?></p><h1><?=e(t($item['name']))?><em>.</em></h1><p class="lead"><?=e(t($item['description']))?></p><div class="facts"><?php if($isCountry): ?><div><span><?=e(t('WHEN TO GO'))?></span><p><?=e(t($item['season']))?></p></div><div><span><?=e(t('CURRENCY'))?></span><p><?=e(t($item['currency']))?></p></div><div><span><?=e(t('DISCOVER'))?></span><p><?=e(t($item['attractions']))?></p></div><?php else: ?><div><span><?=e(t('LOCATION'))?></span><p><?=e(t($item['location']))?></p></div><div><span><?=e(t('MAKE TIME FOR'))?></span><p><?=e(t($item['activities']))?></p></div><?php endif ?></div></div><img class="detail-photo" src="<?=e(photo($item['image']))?>" alt="<?=e(t($item['name']))?>"></div>
+<?php if($isCountry): ?><h2><?=e(t('Find your'))?> <em><?=e(t('favorite place.'))?></em></h2><div class="cards"><?php foreach(all('SELECT * FROM destinations WHERE country_id=? AND active=1',[$item['id']]) as $d): ?><a class="stay-card" href="<?=e(url('destination',['id'=>$d['id']]))?>"><img class="wide-photo" loading="lazy" src="<?=e(photo($d['image']))?>" alt="Illustrative photo for <?=e(t($d['name']))?>"><div class="card-body"><h3><?=e(t($d['name']))?></h3><p><?=e(t($d['description']))?></p><span class="text-link"><?=e(t('Discover destination ↗'))?></span></div></a><?php endforeach ?></div><?php else: ?><h2><?=e(t('Stay a'))?> <em><?=e(t('little longer.'))?></em></h2><div class="cards"><?php hotel_cards(hotel_list('d.id=?',[$item['id']])); ?></div><?php endif ?></section><?php endif ?>
+
+<?php require ROOT.'/includes/page-end.php'; ?>
